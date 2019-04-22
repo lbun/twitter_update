@@ -52,25 +52,26 @@ def theupdate_at_work():
                 df.loc[len(df)] = [tweet.id,tweet.geo,tweet.favorite_count,tweet.retweet_count,tweet.lang]
         df[5]=df[2]+df[3]*2
         df = df.sort_values(by=5,ascending=False)
+        print('\n Data has been updated. Last update: ',time.ctime())
 
         counter = 0
         counter_tweet = 0
         counter_errors = 0
+
         for tw in list(df[0]):
-            # counter+=1
-            # print('Global counter: ',counter, end='\r')
-            if counter_tweet==5:
-                break
-            else:
+            if counter_tweet<5:
+                # counter+=1
+                # print('Global counter: ',counter, end='\r')
                 try:
                     api.retweet(tw)
                     counter_tweet+=1
-                    print('tweet number: ',counter_tweet,end='\r')
-                    for second in range(180):
-                        time.sleep(1)
-                        print('timer: ',179-second,end='\r')
+                    print('\n tweet number: ',counter_tweet,'last post',time.ctime())
+                    time.sleep(180)
                 except:
-                    pass
+                    counter_errors+=1
+                    print('Error n ',counter_errors,'last error',time.ctime())
+            else:
+                pass
 
 if __name__=='__main__':
     theupdate_at_work()
