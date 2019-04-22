@@ -9,12 +9,11 @@ import time
 from time import sleep
 import os
 
-'''
+
 ck = '06ReKUx7R4bNQAQyWGg1ysiy1'
 cs = '6jXPTW5GCqSF32DpVr3EDodhWOgTiAglNAFmMyrS9nkwsxQtoc'
 atk = '1119970679313653760-YXSsiawzukr64jaY3CeaaZoaEco4xK'
 ats = '0JtmNKFVoZXOa8SjjBLI0uWQ78AyMuKHxxYSmAMgEOcsE'
-'''
 
 auth = tweepy.OAuthHandler(ck, cs)
 auth.set_access_token(atk, ats)
@@ -72,6 +71,6 @@ def theupdate_at_work():
                         print('timer: ',179-second,end='\r')
                 except:
                     pass
-                
-if __name__='__main__':
+
+if __name__=='__main__':
     theupdate_at_work()
