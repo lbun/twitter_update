@@ -10,10 +10,10 @@ from time import sleep
 import os
 
 
-ck = 
-cs = 
-atk =
-ats = 
+ck = os.environ.get('CK')
+cs = os.environ.get('CS')
+atk = os.environ.get('ATK')
+ats = os.environ.get('ATS')
 
 auth = tweepy.OAuthHandler(ck, cs)
 auth.set_access_token(atk, ats)
@@ -45,33 +45,36 @@ list_of_friends_id = api.friends_ids()
 
 def theupdate_at_work():
     while True:
-        df = pd.DataFrame(columns=np.arange(5))
+        df = pd.DataFrame(columns=np.arange(8))
         for user in list_of_friends_id:
             list_tweet = api.user_timeline(user,count=3,exclude_replies=True)
             for tweet in list_tweet:
-                df.loc[len(df)] = [tweet.id,tweet.geo,tweet.favorite_count,tweet.retweet_count,tweet.lang]
-        df[5]=df[2]+df[3]*2
-        df = df.sort_values(by=5,ascending=False)
-        print('\n Data has been updated. Last update: ',time.ctime())
-
+                df.loc[len(df)] = [tweet.id,tweet.geo,tweet.favorite_count,tweet.retweet_count,tweet.lang,
+                                user,tweet._json['user']['id'],tweet._json['text']]
+                                   #tweet._json['entities']['urls'][0]['url']]
+        df[8]=df[2]+df[3]*2   #scoring of the tweets
+        df = df[df[4]=='en']
+        df[9] = [False if i[:2]=='RT' else True for i in df[7]]
+        df = df.sort_values(by=9,ascending=False)
+        df = df[df[9]]
         counter = 0
         counter_tweet = 0
         counter_errors = 0
-
         for tw in list(df[0]):
-            if counter_tweet<5:
-                # counter+=1
-                # print('Global counter: ',counter, end='\r')
+            # counter+=1
+            # print('Global counter: ',counter, end='\r')
+            if counter_tweet==5:
+                break
+            else:
                 try:
                     api.retweet(tw)
                     counter_tweet+=1
-                    print('\n tweet number: ',counter_tweet,'last post',time.ctime())
-                    time.sleep(180)
+                    print('tweet number: ',counter_tweet,end='\r')
+                    for second in range(180):
+                        time.sleep(1)
+                        print('timer: ',179-second,end='\r')
                 except:
-                    counter_errors+=1
-                    print('Error n ',counter_errors,'last error',time.ctime())
-            else:
-                pass
+                    pass
 
 if __name__=='__main__':
     theupdate_at_work()
