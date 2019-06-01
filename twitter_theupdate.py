@@ -69,10 +69,10 @@ def theupdate_at_work():
                 try:
                     api.retweet(tw)
                     counter_tweet+=1
-                    print('tweet number: ',counter_tweet,end='\r')
+                    #print('tweet number: ',counter_tweet,end='\r')
                     for second in range(180):
                         time.sleep(1)
-                        print('timer: ',179-second,end='\r')
+                        #print('timer: ',179-second,end='\r')
                 except:
                     pass
 
