@@ -45,29 +45,46 @@ list_of_friends_id = api.friends_ids()
 
 def theupdate_at_work():
     while True:
-        df = pd.DataFrame(columns=np.arange(8))
-        for user in list_of_friends_id:
+        df = pd.DataFrame(columns=np.arange(11))
+        for user in list_of_friends_id[:5]:
             list_tweet = api.user_timeline(user,count=3,exclude_replies=True)
             for tweet in list_tweet:
-                df.loc[len(df)] = [tweet.id,tweet.geo,tweet.favorite_count,tweet.retweet_count,tweet.lang,
-                                user,tweet._json['user']['id'],tweet._json['text']]
-                                   #tweet._json['entities']['urls'][0]['url']]
-        df[8]=df[2]+df[3]*2   #scoring of the tweets
+                try:
+                    hashtags = ' '.join([i for i in tweet._json['text'].split() if i[0]=='#'])
+                    url=tweet._json['entities']['urls'][0]['url']
+                    page = requests.get(url)
+                    soup = BeautifulSoup(page.text, 'html.parser')
+                    h1 = '#news '+soup.find('h1').text.strip()
+
+                    df.loc[len(df)] = [tweet.id, #0
+                                       tweet.geo, #1
+                                       tweet.favorite_count, #2
+                                       tweet.retweet_count, #3
+                                       tweet.lang, #4
+                                        user,  #5
+                                       tweet._json['user']['id'],  #6
+                                       tweet._json['text'],  #7
+                                       tweet._json['entities']['urls'][0]['url'],   #8
+                                       hashtags,  #9
+                                       h1+' '+url+' '+hashtags]        #10
+                except:
+                    pass
+        df[11]=df[2]+df[3]*2   #scoring of the tweets
         df = df[df[4]=='en']
-        df[9] = [False if i[:2]=='RT' else True for i in df[7]]
-        df = df.sort_values(by=9,ascending=False)
-        df = df[df[9]]
+        df[12] = [False if i[:2]=='RT' else True for i in df[7]]
+        df = df.sort_values(by=11,ascending=False)
+        df = df[df[12]]
         counter = 0
         counter_tweet = 0
         counter_errors = 0
-        for tw in list(df[0]):
+        for tw in list(df[10]):
             # counter+=1
             # print('Global counter: ',counter, end='\r')
             if counter_tweet==5:
                 break
             else:
                 try:
-                    api.retweet(tw)
+                    api.update_status(tw)
                     counter_tweet+=1
                     #print('tweet number: ',counter_tweet,end='\r')
                     for second in range(180):
