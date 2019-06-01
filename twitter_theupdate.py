@@ -8,6 +8,8 @@ import pandas as pd
 import time
 from time import sleep
 import os
+import requests
+from bs4 import BeautifulSoup
 
 
 ck = os.environ.get('CK')
@@ -55,7 +57,6 @@ def theupdate_at_work():
                     page = requests.get(url)
                     soup = BeautifulSoup(page.text, 'html.parser')
                     h1 = '#news '+soup.find('h1').text.strip()
-
                     df.loc[len(df)] = [tweet.id, #0
                                        tweet.geo, #1
                                        tweet.favorite_count, #2
