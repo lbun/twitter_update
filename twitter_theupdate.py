@@ -47,6 +47,7 @@ list_of_friends_id = api.friends_ids()
 
 def theupdate_at_work():
     while True:
+        list_of_friends_id = api.friends_ids()
         df = pd.DataFrame(columns=np.arange(11))
         for user in list_of_friends_id[:5]:
             list_tweet = api.user_timeline(user,count=3,exclude_replies=True)
