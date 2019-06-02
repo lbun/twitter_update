@@ -88,6 +88,7 @@ def theupdate_at_work():
                 try:
                     api.update_status(tw)
                     counter_tweet+=1
+                    print(time.ctime(time.time()),'counter= ',counter)
                     #print('tweet number: ',counter_tweet,end='\r')
                     for second in range(180):
                         time.sleep(1)
