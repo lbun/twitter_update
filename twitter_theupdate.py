@@ -10,12 +10,15 @@ from time import sleep
 import os
 import requests
 from bs4 import BeautifulSoup
+import facebook
 
 
 ck = os.environ.get('CK')
 cs = os.environ.get('CS')
 atk = os.environ.get('ATK')
 ats = os.environ.get('ATS')
+
+token_facebook = os.environ.get('fb')
 
 auth = tweepy.OAuthHandler(ck, cs)
 auth.set_access_token(atk, ats)
@@ -80,7 +83,6 @@ def theupdate_at_work():
         counter_tweet = 0
         counter_errors = 0
         for tw in list(df[10]):
-            counter_tweet = 0
             # print('Global counter: ',counter, end='\r')
             if counter_tweet==5:
                 break
