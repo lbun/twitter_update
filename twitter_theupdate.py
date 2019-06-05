@@ -80,7 +80,7 @@ def theupdate_at_work():
         counter_tweet = 0
         counter_errors = 0
         for tw in list(df[10]):
-            # counter+=1
+            counter_tweet = 0
             # print('Global counter: ',counter, end='\r')
             if counter_tweet==5:
                 break
@@ -88,7 +88,7 @@ def theupdate_at_work():
                 try:
                     api.update_status(tw)
                     counter_tweet+=1
-                    print(time.ctime(time.time()),'counter= ',counter)
+                    print(time.ctime(time.time()),'counter= ',counter_tweet)
                     #print('tweet number: ',counter_tweet,end='\r')
                     for second in range(180):
                         time.sleep(1)
