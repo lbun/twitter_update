@@ -82,8 +82,6 @@ def theupdate_at_work():
         counter = 0
         counter_tweet = 0
         counter_errors = 0
-        token = os.environ.get('fb')
-        fb = facebook.GraphAPI(access_token=token)
         for tw in list(df[10]):
             # print('Global counter: ',counter, end='\r')
             if counter_tweet==5:
@@ -93,7 +91,8 @@ def theupdate_at_work():
                     api.update_status(tw)
                     counter_tweet+=1
                     print(time.ctime(time.time()),'counter= ',counter_tweet)
-
+                    token = os.environ.get('fb')
+                    fb = facebook.GraphAPI(access_token=token)
                     fb.put_object(parent_object="me",
                         connection_name="feed",
                         message=tw,)
