@@ -96,10 +96,11 @@ def theupdate_at_work():
                     fb.put_object(parent_object="me",
                         connection_name="feed",
                         message=tw,)
+                    time.sleep(180)
                         #link="https://www.facebook.com")
                     #print('tweet number: ',counter_tweet,end='\r')
-                    for second in range(180):
-                        time.sleep(1)
+                    #for second in range(180):
+                    #    time.sleep(1)
                         #print('timer: ',179-second,end='\r')
                 except:
                     pass
