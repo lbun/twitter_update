@@ -50,9 +50,8 @@ list_of_friends_id = api.friends_ids()
 
 def theupdate_at_work():
     while True:
-        list_of_friends_id = api.friends_ids()
         df = pd.DataFrame(columns=np.arange(11))
-        for user in list_of_friends_id[:5]:
+        for user in list_of_friends_id:
             list_tweet = api.user_timeline(user,count=3,exclude_replies=True)
             for tweet in list_tweet:
                 try:
@@ -61,6 +60,7 @@ def theupdate_at_work():
                     page = requests.get(url)
                     soup = BeautifulSoup(page.text, 'html.parser')
                     h1 = '#news '+soup.find('h1').text.strip()
+
                     df.loc[len(df)] = [tweet.id, #0
                                        tweet.geo, #1
                                        tweet.favorite_count, #2
@@ -82,25 +82,25 @@ def theupdate_at_work():
         counter = 0
         counter_tweet = 0
         counter_errors = 0
-        for tw in list(df[10]):
+        for i in list(df.index):
+            # counter+=1
             # print('Global counter: ',counter, end='\r')
             if counter_tweet==5:
                 break
             else:
                 try:
-                    api.update_status(tw)
-                    counter_tweet+=1
-                    print(time.ctime(time.time()),'counter= ',counter_tweet)
-                    token = os.environ.get('fb')
+                    api.update_status(df.loc[i][10])
                     fb = facebook.GraphAPI(access_token=token)
-                    fb.put_object(parent_object="me",
+                    fb.put_object(
+                        parent_object="me",
                         connection_name="feed",
-                        message=tw,)
-                    time.sleep(180)
-                        #link="https://www.facebook.com")
+                        message=df.loc[i][7],
+                        link=df.loc[i][8]
+                                 )
+                    counter_tweet+=1
                     #print('tweet number: ',counter_tweet,end='\r')
-                    #for second in range(180):
-                    #    time.sleep(1)
+                    for second in range(180):
+                        time.sleep(1)
                         #print('timer: ',179-second,end='\r')
                 except:
                     pass
