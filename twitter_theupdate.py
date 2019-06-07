@@ -50,7 +50,7 @@ list_of_friends_id = api.friends_ids()
 
 def create_df():
     df = pd.DataFrame(columns=np.arange(12))
-    for user in list_of_friends_id[:5]:
+    for user in list_of_friends_id:
         list_tweet = api.user_timeline(user,count=3,exclude_replies=True)
         for tweet in list_tweet:
             try:
