@@ -100,6 +100,6 @@ if __name__=='__main__':
     while tweet_counter<6:
         df = create_df()
         post_tweet(df)
-        tweet _counter+=1
+        tweet_counter+=1
         if tweet_counter==5:
             tweet_counter=0
